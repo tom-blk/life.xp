@@ -1,7 +1,9 @@
 import SkillList from './components/pages/skill-list/SkillList.Component';
 
-export const App = () => {
+const App = () => {
   return (
     <SkillList />
   );
 }
+
+export default App;
