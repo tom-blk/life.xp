@@ -11,10 +11,13 @@ const SkillList = () => {
   const [skills, setSkills] = useState<Skill[]>([]);
 
   useEffect(() => {
-    RNFS.readFile(filePath, 'utf8')
-        .then((res) => {
+    RNFS.exists(filePath)
+      .then((exists) => {
+        RNFS.readFile(filePath, 'utf8')
+          .then((res) => {
             setSkills(JSON.parse(res));
-        })
+          })
+      }) 
   }, [skills])
 
   return (

@@ -21,16 +21,15 @@ const AddSkill = () => {
         RNFS.exists(filePath)
         .then((exists) => {
             if(exists){
-                addSkillToFile();
-            } else {
-                createFile();
-            }
-        })
                 RNFS.readFile(filePath, 'utf8')
-        .then((res) => {
-            let skillList = JSON.parse(res);
-            skillList.push(skillData);
-            return RNFS.writeFile(filePath, JSON.stringify(skillList), 'utf8');
+                    .then((res) => {
+                        let skillList = JSON.parse(res);
+                        skillList.push(skillData);
+                        return RNFS.writeFile(filePath, JSON.stringify(skillList), 'utf8');
+                    })
+            } else {
+                return RNFS.writeFile(filePath, JSON.stringify([skillData]), 'utf8');
+            }
         })
     }
 
