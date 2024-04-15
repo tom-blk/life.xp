@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import * as FS from 'expo-file-system';
-import { View } from 'react-native'
+import { Text, View } from 'react-native'
 import SkillCard from '../../skill-card/SkillCard.Component';
 import { Skill } from '../../../types/Skill';
 
@@ -15,6 +15,7 @@ const SkillList = () => {
       .then((exists) => {
         FS.readAsStringAsync(filePath, { encoding: FS.EncodingType.UTF8 })
           .then((res) => {
+            console.log(res);
             setSkills(JSON.parse(res));
           })
       }) 
@@ -22,7 +23,12 @@ const SkillList = () => {
 
   return (
     <View>
+      
       {
+        skills.length < 1 
+        ?
+        <Text>No Skills here...</Text>
+        :
         skills.map((skill, index) => {
           return (
             <SkillCard 
