@@ -9,7 +9,8 @@ const AddSkill = () => {
 
     const skillDataTemplate: Skill = {
         skillName: "",
-        timeToLevelUp: 0,
+        secondsToLevelUp: 0,
+        secondsToNextLevel: 0,
         importance: 1,
         level: 0
     }
@@ -31,7 +32,7 @@ const AddSkill = () => {
                 return RNFS.writeFile(filePath, JSON.stringify([skillData]), 'utf8');
             }
         })
-    }
+   }
 
     return (
         <View>
@@ -41,7 +42,7 @@ const AddSkill = () => {
                 <div>
                     <Text>Add Skill</Text>
                     <TextInput placeholder={"Enter Skill Name"} onChangeText={(text) => setSkillData({...skillData, skillName: text})}/>
-                    <TextInput placeholder={"Enter Time Spent to level up"} onChangeText={(text) => setSkillData({...skillData, timeToLevelUp: parseInt(text)})}/>
+                    <TextInput placeholder={"Enter Time Spent to level up"} onChangeText={(text) => setSkillData({...skillData, secondsToLevelUp: parseInt(text)})}/>
                     <Text>Select Skill Importance</Text>
                     <div>
                         <Button title={"1"} onPress={() => setSkillData({...skillData, importance: 1})} />

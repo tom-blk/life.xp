@@ -1,6 +1,7 @@
 export interface Skill {
     skillName: string;
     level: number;
-    timeToLevelUp: number;
+    secondsToLevelUp: number;
+    secondsToNextLevel: number;
     importance: 1 | 2 | 3;
 }
