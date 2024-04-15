@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import RNFS from 'react-native-fs';
+import * as FS from 'expo-file-system';
 import { Button, TextInput, View, Text} from 'react-native'
 import { Skill } from "../../../types/Skill";
 
 const AddSkill = () => {
 
-    const filePath = RNFS.DocumentDirectoryPath + '/skill-list.json';
+    const filePath = FS.documentDirectory + '/skill-list.json';
 
     const skillDataTemplate: Skill = {
         skillName: "",
@@ -15,45 +15,36 @@ const AddSkill = () => {
         level: 0
     }
 
-    const [buttonClicked, setButtonClicked] = useState(false);
     const [skillData, setSkillData] = useState<Skill>(skillDataTemplate);
 
     const addSkill = () => {
-        RNFS.exists(filePath)
+        FS.getInfoAsync(filePath)
         .then((exists) => {
             if(exists){
-                RNFS.readFile(filePath, 'utf8')
+                FS.readAsStringAsync(filePath, { encoding: FS.EncodingType.UTF8 })
                     .then((res) => {
                         let skillList = JSON.parse(res);
                         skillList.push(skillData);
-                        return RNFS.writeFile(filePath, JSON.stringify(skillList), 'utf8');
+                        return FS.writeAsStringAsync(filePath, JSON.stringify(skillList), { encoding: FS.EncodingType.UTF8 });
                     })
             } else {
-                return RNFS.writeFile(filePath, JSON.stringify([skillData]), 'utf8');
+                return FS.writeAsStringAsync(filePath, JSON.stringify([skillData]), { encoding: FS.EncodingType.UTF8 });
             }
         })
    }
 
     return (
         <View>
-            {
-                buttonClicked
-                ? 
-                <div>
-                    <Text>Add Skill</Text>
-                    <TextInput placeholder={"Enter Skill Name"} onChangeText={(text) => setSkillData({...skillData, skillName: text})}/>
-                    <TextInput placeholder={"Enter Time Spent to level up"} onChangeText={(text) => setSkillData({...skillData, secondsToLevelUp: parseInt(text)})}/>
-                    <Text>Select Skill Importance</Text>
-                    <div>
-                        <Button title={"1"} onPress={() => setSkillData({...skillData, importance: 1})} />
-                        <Button title={"2"} onPress={() => setSkillData({...skillData, importance: 2})} />
-                        <Button title={"3"} onPress={() => setSkillData({...skillData, importance: 3})} />
-                    </div>
-                    <Button title='Add' onPress={() => addSkill()}/>
-                </div>            
-                : 
-                <Button title={"Add Skill"} onPress={() => setButtonClicked(true)}/> 
-            }
+            <Text>Add Skill</Text>
+            <TextInput placeholder={"Enter Skill Name"} onChangeText={(text) => setSkillData({...skillData, skillName: text})}/>
+            <TextInput placeholder={"Enter Time Spent to level up"} onChangeText={(text) => setSkillData({...skillData, secondsToLevelUp: parseInt(text)})}/>
+            <Text>Select Skill Importance</Text>
+            <View>
+                <Button title={"1"} onPress={() => setSkillData({...skillData, importance: 1})} />
+                <Button title={"2"} onPress={() => setSkillData({...skillData, importance: 2})} />
+                <Button title={"3"} onPress={() => setSkillData({...skillData, importance: 3})} />
+            </View>
+            <Button title='Add' onPress={() => addSkill()}/>            
         </View> 
     )
 }

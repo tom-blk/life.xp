@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import RNFS from 'react-native-fs';
-import { View, Text } from 'react-native'
+import * as FS from 'expo-file-system';
+import { View } from 'react-native'
 import SkillCard from '../../skill-card/SkillCard.Component';
 import { Skill } from '../../../types/Skill';
 
 const SkillList = () => {
 
-  const filePath = RNFS.DocumentDirectoryPath + '/skill-list.json';
+  const filePath = FS.documentDirectory + '/skill-list.json';
 
   const [skills, setSkills] = useState<Skill[]>([]);
 
   useEffect(() => {
-    RNFS.exists(filePath)
+    FS.getInfoAsync(filePath)
       .then((exists) => {
-        RNFS.readFile(filePath, 'utf8')
+        FS.readAsStringAsync(filePath, { encoding: FS.EncodingType.UTF8 })
           .then((res) => {
             setSkills(JSON.parse(res));
           })
@@ -29,7 +29,8 @@ const SkillList = () => {
               key={index}
               skillName={skill.skillName}
               level={skill.level}
-              timeToLevelUp={skill.timeToLevelUp}
+              secondsToLevelUp={skill.secondsToLevelUp}
+              secondsToNextLevel={skill.secondsToNextLevel}
               importance={skill.importance}
             /> 
           )
