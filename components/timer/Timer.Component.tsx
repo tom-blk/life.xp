@@ -1,14 +1,19 @@
 import React, { useState } from 'react'
 import { Timer } from 'react-native-stopwatch-timer'
 
-const SkillLevelTimer = () => {
+interface Props {
+    level: number;
+}
+
+const SkillLevelTimer = (props: Props) => {
   
     const [timerStart, setTimerStart] = useState(false);
-    const
+    const [timerReset, setTimerReset] = useState(false);
+    const [totalDuration, setTotalDuration] = useState(90000);
   
   return (
-    <Timer totalDuration={this.state.totalDuration} msecs start={this.state.timerStart}
-          reset={this.state.timerReset}
+    <Timer totalDuration={totalDuration} msecs start={timerStart}
+          reset={timerReset}
           options={options}
           handleFinish={handleTimerComplete}
           getTime={this.getFormattedTime} />
