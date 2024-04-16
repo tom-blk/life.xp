@@ -17,21 +17,19 @@ const AddSkill = () => {
 
     const [skillData, setSkillData] = useState<Skill>(skillDataTemplate);
 
-    const addSkill = () => {
-        FS.getInfoAsync(filePath)
-        .then((exists) => {
-            if(exists){
-                FS.readAsStringAsync(filePath, { encoding: FS.EncodingType.UTF8 })
-                    .then((res) => {
-                        let skillList = JSON.parse(res);
-                        skillList.push(skillData);
-                        return FS.writeAsStringAsync(filePath, JSON.stringify(skillList), { encoding: FS.EncodingType.UTF8 });
-                    })
-            } else {
-                return FS.writeAsStringAsync(filePath, JSON.stringify([skillData]), { encoding: FS.EncodingType.UTF8 });
-            }
-        })
-   }
+    const addSkill = async () => {
+        const fileInfo = await FS.getInfoAsync(filePath)
+        if(fileInfo.exists){
+            const rawData = await FS.readAsStringAsync(filePath, { encoding: FS.EncodingType.UTF8 })
+            let skillList = JSON.parse(rawData);
+            skillList.push(skillData);
+            await FS.writeAsStringAsync(filePath, JSON.stringify(skillList), { encoding: FS.EncodingType.UTF8 })
+                .then(() => console.log("File Written"))
+        } else {
+            await FS.writeAsStringAsync(filePath, JSON.stringify([skillData]), { encoding: FS.EncodingType.UTF8 })
+                .then(() => console.log("File Written"))
+        }
+    }
 
     return (
         <View>

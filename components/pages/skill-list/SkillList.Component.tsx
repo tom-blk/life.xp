@@ -11,14 +11,14 @@ const SkillList = () => {
   const [skills, setSkills] = useState<Skill[]>([]);
 
   useEffect(() => {
-    FS.getInfoAsync(filePath)
-      .then((exists) => {
-        FS.readAsStringAsync(filePath, { encoding: FS.EncodingType.UTF8 })
-          .then((res) => {
-            console.log(res);
-            setSkills(JSON.parse(res));
-          })
-      }) 
+    const readData = async () => {
+      const fileInfo = await FS.getInfoAsync(filePath)
+      if(fileInfo.exists){
+        const rawData = await FS.readAsStringAsync(filePath, { encoding: FS.EncodingType.UTF8 })
+        setSkills(JSON.parse(rawData));
+      }
+    }
+    readData();
   }, [skills])
 
   return (
