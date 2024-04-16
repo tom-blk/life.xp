@@ -8,11 +8,11 @@ const SkillCard = (props: Skill) => {
     const navigation = useNavigation();
 
     const navigateToSkill = () => {
-
+        navigation.navigate("Skill Page");
     }
 
     const navigateToTrainSkill = () => {
-
+        navigation.navigate("Skill Timer");
     }
 
     return (
