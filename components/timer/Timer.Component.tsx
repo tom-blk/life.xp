@@ -4,7 +4,8 @@ import { Pressable, StyleSheet } from 'react-native';
 import { Timer } from 'react-native-stopwatch-timer'
 
 interface Props {
-    level: number;
+    skillName: string;
+    skillLevel: number;
     secondsToLevelUp: number;
 }
 

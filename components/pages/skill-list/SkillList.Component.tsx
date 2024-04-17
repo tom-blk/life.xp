@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import * as FS from 'expo-file-system';
-import { Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import SkillCard from '../../skill-card/SkillCard.Component';
 import { Skill } from '../../../types/Skill';
 
@@ -22,8 +22,7 @@ const SkillList = () => {
   }, [skills])
 
   return (
-    <View>
-      
+    <View style={styles.list}>
       {
         skills.length < 1 
         ?
@@ -34,7 +33,7 @@ const SkillList = () => {
             <SkillCard 
               key={index}
               skillName={skill.skillName}
-              level={skill.level}
+              skillLevel={skill.skillLevel}
               secondsToLevelUp={skill.secondsToLevelUp}
               secondsToNextLevel={skill.secondsToNextLevel}
               importance={skill.importance}
@@ -45,5 +44,15 @@ const SkillList = () => {
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  list: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    gap: 10,
+    margin: 20
+  }
+})
 
 export default SkillList

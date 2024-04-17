@@ -12,7 +12,7 @@ const AddSkill = () => {
         secondsToLevelUp: 0,
         secondsToNextLevel: 0,
         importance: 1,
-        level: 0
+        skillLevel: 0
     }
 
     const [skillData, setSkillData] = useState<Skill>(skillDataTemplate);

@@ -1,19 +1,21 @@
 import React from 'react'
 import { Button, Pressable, StyleSheet, Text} from 'react-native';
-import { ParamListBase, useNavigation } from '@react-navigation/native';
+import { ParamListBase, RouteProp, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Skill } from '../../types/Skill';
+import { RouteParamsList } from '../../../types/RouteParamsList';
 
-const SkillCard = (props: Skill) => {
-    const {skillName, skillLevel, secondsToNextLevel, secondsToLevelUp} = props;
+type SkillCardRouteProps = RouteProp<RouteParamsList, 'Skill Page'>
+
+const SkillPage = ({ route }: { route : SkillCardRouteProps }) => {
+    const {skillName, skillLevel, secondsToNextLevel, secondsToLevelUp} = route.params;
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
     const navigateToSkill = () => {
-        navigation.navigate("Skill Page", {skillName, skillLevel, secondsToNextLevel, secondsToLevelUp});
+        navigation.navigate('Skill List');
     }
 
     const navigateToTrainSkill = () => {
-        navigation.navigate("Skill Timer", {skillName, skillLevel, secondsToLevelUp});
+        navigation.navigate("Skill Timer");
     }
 
     return (
@@ -39,4 +41,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default SkillCard
+export default SkillPage 
