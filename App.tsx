@@ -6,9 +6,10 @@ import AddSkill from './components/pages/add-skill/AddSkill.Component';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SkillLevelTimer from './components/timer/Timer.Component';
 import SkillPage from './components/pages/skill-page/SkillPage.Component';
+import { RouteParamsList } from './types/RouteParamsList';
 
 const Drawer = createDrawerNavigator();
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RouteParamsList>();
 
 const DrawerRoutes = () => {
   return (

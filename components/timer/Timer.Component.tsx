@@ -1,15 +1,14 @@
+import { RouteProp } from '@react-navigation/native';
 import React, { useState } from 'react'
 import { Pressable, StyleSheet } from 'react-native';
 //@ts-ignore 
 import { Timer } from 'react-native-stopwatch-timer'
+import { RouteParamsList } from '../../types/RouteParamsList';
 
-interface Props {
-    skillName: string;
-    skillLevel: number;
-    secondsToLevelUp: number;
-}
+type SkillTimerRouteProps = RouteProp<RouteParamsList, 'Skill Timer'>
 
-const SkillLevelTimer = (props: Props) => {
+const SkillLevelTimer = ({ route }: {route: SkillTimerRouteProps} ) => {
+    const { secondsToLevelUp } = route.params;
   
     const [timerStart, setTimerStart] = useState(false);
     const [timerReset, setTimerReset] = useState(false);
@@ -20,7 +19,7 @@ const SkillLevelTimer = (props: Props) => {
 
     return (
         <Pressable onPress={() => setTimerStart(!timerStart)}>
-            <Timer totalDuration={props.secondsToLevelUp} msecs start={timerStart}
+            <Timer totalDuration={secondsToLevelUp} msecs start={timerStart}
                 reset={timerReset}
                 options={styles.options}
                 handleFinish={handleTimerComplete}
