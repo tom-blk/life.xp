@@ -5,7 +5,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Skill } from '../../types/Skill';
 
 const SkillCard = (props: Skill) => {
-    const {skillName, skillLevel, secondsToNextLevel, secondsToLevelUp} = props;
+    const {skillName, skillLevel, secondsToNextLevel, secondsToLevelUp, levelUpMethod, goals} = props;
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
     const navigateToSkill = () => {
@@ -13,7 +13,11 @@ const SkillCard = (props: Skill) => {
     }
 
     const navigateToTrainSkill = () => {
-        navigation.navigate("Skill Timer", {skillName, skillLevel, secondsToLevelUp});
+        if(levelUpMethod === 'time'){
+            navigation.navigate("Skill Timer", { skillName, skillLevel, secondsToLevelUp });
+        }else{
+            navigation.navigate("Skill Checklist", { skillName, skillLevel, goals});
+        }
     }
 
     return (
