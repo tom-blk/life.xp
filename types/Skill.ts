@@ -1,4 +1,4 @@
-interface SkillA{
+export interface SkillA{
     skillName: string;
     skillLevel: number;
     secondsToLevelUp: number;
@@ -8,7 +8,7 @@ interface SkillA{
     category: string;
 }
 
-interface SkillB {
+export interface SkillB {
     skillName: string;
     skillLevel: number;
     levelUpMethod: 'goal';

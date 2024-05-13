@@ -32,13 +32,7 @@ const SkillList = () => {
           return (
             <SkillCard 
               key={index}
-              skillName={skill.skillName}
-              skillLevel={skill.skillLevel}
-              secondsToLevelUp={skill.secondsToLevelUp}
-              secondsToNextLevel={skill.secondsToNextLevel}
-              importance={skill.importance}
-              levelUpMethod={skill.levelUpMethod}
-              category={skill.category}
+              {...skill}
             /> 
           )
         })

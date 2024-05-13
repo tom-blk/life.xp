@@ -25,7 +25,7 @@ const SkillCard = (props: Skill) => {
             <Text>{skillName}</Text>
             <Text>{skillLevel}</Text>
             {levelUpMethod === 'time' ? <Text>Time</Text> : <Text>Goal</Text>}
-            {levelUpMethod === 'time' ? <Text>{props.secondsToLevelUp}</Text> : <Text>{props.goals.join(', ')}</Text>}
+            {levelUpMethod === 'time' ? <Text>{props.secondsToLevelUp}</Text> : <Text>Test</Text>}
             <Button title="Train" onPress={e => navigateToTrainSkill()}/>
         </Pressable>
     )

@@ -3,17 +3,23 @@ import {StyleSheet, Text, View} from 'react-native';
 import { RouteProp } from '@react-navigation/native';
 import { RouteParamsList } from '../../../types/RouteParamsList';
 
-type SkillCardRouteProps = RouteProp<RouteParamsList, 'Skill Page'>
+type SkillPageRouteProps = RouteProp<RouteParamsList, 'Skill Page'>
 
-const SkillPage = ({ route }: { route: SkillCardRouteProps })=> {
-    const {skillName, skillLevel, secondsToNextLevel, secondsToLevelUp} = route.params;
+const SkillPage = ({ route }: { route: SkillPageRouteProps })=> {
+    const {skillName, skillLevel} = route.params;
+
+    const isSkillA = route.params.levelUpMethod === 'time';
 
     return (
-        <View>
+        <View style={styles.card}>
             <Text>{skillName}</Text>
             <Text>{skillLevel}</Text>
-            <Text>{secondsToLevelUp}</Text>
-            <Text>{secondsToNextLevel}</Text>
+            {isSkillA ? <Text>Time</Text> : <Text>Goals</Text>}
+            {
+                isSkillA 
+                ? <Text>To Next Level: {route.params.secondsToLevelUp} Needed Per Level: {route.params.secondsToLevelUp}</Text>
+                : <Text>{route.params.goals}</Text>
+            }
         </View>
     )
 }

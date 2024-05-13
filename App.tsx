@@ -25,8 +25,8 @@ const DrawerRoutes = () => {
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Skill List">
-        <Stack.Screen name="Skill List" component={DrawerRoutes} options={{headerShown: false}} />
+      <Stack.Navigator initialRouteName="Drawer Routes">
+        <Stack.Screen name="Drawer Routes" component={DrawerRoutes} options={{headerShown: false}} />
         <Stack.Screen name="Skill Timer" component={SkillLevelTimer} />
         <Stack.Screen name="Skill Page" component={SkillPage} />
         <Stack.Screen name="Skill Checklist" component={SkillCheckList} />
