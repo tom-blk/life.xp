@@ -2,35 +2,35 @@ import React, { useState } from 'react'
 import * as FS from 'expo-file-system';
 import { Button, TextInput, View, Text} from 'react-native'
 import { Skill } from "../../../types/Skill";
-import { Picker } from '@react-native-picker/picker';
-import GoalInput from './goal-input/GoalInput.Component';
-
 import { LevelUpMetric } from '../../../types/Skill';
+import GoalInput from './goal-input/GoalInput.Component';
+import LevelUpMetricPicker from './level-up-metric-picker/LevelUpMetricPicker.Component';
+
 
 const AddSkill = () => {
 
     const filePath = FS.documentDirectory + '/skill-list.json';
 
-    const skillDataTemplateA: Skill = {
+    const skillDataTemplateTime: Skill = {
         skillName: "",
         skillLevel: 0,
         secondsToLevelUp: 0,
         secondsToNextLevel: 0,
-        levelUpMetric: 'time',
+        levelUpMetric: "time",
         importance: 1,
         category: ""
     }
 
-    const skillDataTemplateB: Skill = {
+    const skillDataTemplateGoal: Skill = {
         skillName: "",
-        levelUpMetric: 'goal',
-        goals: [],
-        importance: 1,
         skillLevel: 0,
+        goals: [],
+        levelUpMetric: "goal",
+        importance: 1,
         category: ""
     }
 
-    const [skillData, setSkillData] = useState<Skill>(skillDataTemplateA);
+    const [skillData, setSkillData] = useState<Skill>(skillDataTemplateTime);
 
     const addSkill = async () => {
         const fileInfo = await FS.getInfoAsync(filePath)
@@ -46,40 +46,40 @@ const AddSkill = () => {
         }
     }
 
-    const handleSetGoals = (goals: string[]) => {
+    const handleAddGoal = (goal: string) => {
         if(skillData.levelUpMetric === "time") return
-        setSkillData({...skillData, goals: goals})
+        setSkillData({
+            ...skillData, 
+            goals: [...skillData.goals, goal]
+        })
     }
 
-    const SkillPicker = () => {
-        const returnSkillTemplate = (value: LevelUpMetric) => {
-            if(value === 'time'){
-                return skillDataTemplateA;
-            }else{
-                return skillDataTemplateB;
-            }
+    const handleRemoveGoal = (goal: string) => {
+        if(skillData.levelUpMetric === "time") return
+        setSkillData({
+            ...skillData,
+            goals: skillData.goals.filter((item: string) => item !== goal)
+        })
+    }
+
+    const handleLevelUpMetricChange = (levelUpMetric: LevelUpMetric) => {
+        if(levelUpMetric === "time") {
+            setSkillData(skillDataTemplateTime)
+        } else {
+            setSkillData(skillDataTemplateGoal)
         }
-
-        return (
-            <Picker
-                onValueChange={(itemValue: LevelUpMetric) => setSkillData(returnSkillTemplate(itemValue))}
-            >
-                <Picker.Item label={"Time"} value={"time"}/>
-                <Picker.Item label={"Goal"} value={"goal"}/>
-            </Picker>
-        )
     }
-
+    
     return (
         <View>
             <Text>Add Skill</Text>
             <TextInput placeholder={"Enter Skill Name"} onChangeText={(text) => setSkillData({...skillData, skillName: text})}/>
             <Text>Do you want to progress by spending time to practice, or by reaching specific goals?</Text>
-            <SkillPicker/>
+            <LevelUpMetricPicker changeLevelUpMetric={handleLevelUpMetricChange}/>
             {
                 skillData.levelUpMetric === 'time' 
                 ? <TextInput placeholder={"Enter Time Spent to level up"} onChangeText={(text) => setSkillData({...skillData, secondsToLevelUp: parseInt(text)})}/>
-                : <GoalInput confirmGoals={handleSetGoals}/>
+                : <GoalInput goals={skillData.goals} addGoal={handleAddGoal} removeGoal={handleRemoveGoal}/>
             }
             <Text>Select Skill Importance</Text>
             <View>

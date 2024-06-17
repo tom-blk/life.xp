@@ -2,22 +2,18 @@ import React, { useState } from 'react'
 import { Button, TextInput, View, Text, Pressable} from 'react-native'
 
 interface Props {
-    confirmGoals: (goals: string[]) => void;
+    goals: string[]
+    addGoal: (goal: string) => void;
+    removeGoal: (goal: string) => void;
 }
 
-const GoalInput = ({confirmGoals}: Props) => {
+const GoalInput = ({goals, addGoal, removeGoal}: Props) => {
 
-    const [goals, setGoals] = useState<string[]>([]); 
     const [currentGoalText, setCurrentGoalText] = useState<string>("");
 
-    const addGoal = () => {
-        if(goals.length > 2) return
-        setGoals([...goals, currentGoalText]);
+    const handleAddGoal = () => {
+        addGoal(currentGoalText);
         setCurrentGoalText("");
-    }
-
-    const removeGoal = (goal: string) => {
-        setGoals(goals.filter((item) => item !== goal))
     }
 
     return(
@@ -36,12 +32,11 @@ const GoalInput = ({confirmGoals}: Props) => {
                 ?
                 <View>
                     <TextInput placeholder={"Enter Goal"} value={currentGoalText} onChangeText={(text) => setCurrentGoalText(text)}/>
-                    <Button title={"Add Goal"} onPress={() => addGoal()}/>
+                    <Button title={"Add Goal"} onPress={() => handleAddGoal()}/>
                 </View>
                 :
                 <></>
             }
-            <Button title={"Confirm Goals"} onPress={() => confirmGoals(goals)}/>
         </View>
     )
 }
