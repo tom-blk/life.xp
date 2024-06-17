@@ -5,7 +5,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Skill } from '../../types/Skill';
 
 const SkillCard = (props: Skill) => {
-    const {skillName, skillLevel, levelUpMetric} = props;
+    const {skillName, skillLevel, importance, levelUpMetric} = props;
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
     const navigateToSkill = () => {
@@ -23,7 +23,7 @@ const SkillCard = (props: Skill) => {
     return (
         <Pressable style={styles.card} onPress={e =>navigateToSkill()}>
             <Text>{skillName}</Text>
-            <Text>{skillLevel}</Text>
+            <Text>{importance}</Text>
             {levelUpMetric === 'time' ? <Text>Time</Text> : <Text>Goal</Text>}
             {levelUpMetric === 'time' ? <Text>{props.secondsToLevelUp}</Text> : <Text>Test</Text>}
             <Button title="Train" onPress={e => navigateToTrainSkill()}/>
