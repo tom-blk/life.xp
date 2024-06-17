@@ -12,6 +12,7 @@ const GoalInput = ({goals, addGoal, removeGoal}: Props) => {
     const [currentGoalText, setCurrentGoalText] = useState<string>("");
 
     const handleAddGoal = () => {
+        if(goals.length > 2) return
         addGoal(currentGoalText);
         setCurrentGoalText("");
     }
