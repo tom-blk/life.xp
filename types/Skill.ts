@@ -3,7 +3,7 @@ export interface SkillA{
     skillLevel: number;
     secondsToLevelUp: number;
     secondsToNextLevel: number;
-    levelUpMethod: 'time';
+    levelUpMetric: Extract<LevelUpMetric, "time">;
     importance: 1 | 2 | 3;
     category: string;
 }
@@ -11,11 +11,13 @@ export interface SkillA{
 export interface SkillB {
     skillName: string;
     skillLevel: number;
-    levelUpMethod: 'goal';
+    levelUpMetric: Extract<LevelUpMetric, "goal">;
     goals: string[];
     importance: 1 | 2 | 3;
     category: string;
 }
+
+export type LevelUpMetric = "goal" | "time";
 
 export type Skill = SkillA | SkillB;
 

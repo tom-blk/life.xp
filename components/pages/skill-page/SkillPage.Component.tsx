@@ -8,7 +8,7 @@ type SkillPageRouteProps = RouteProp<RouteParamsList, 'Skill Page'>
 const SkillPage = ({ route }: { route: SkillPageRouteProps })=> {
     const {skillName, skillLevel} = route.params;
 
-    const isSkillA = route.params.levelUpMethod === 'time';
+    const isSkillA = route.params.levelUpMetric === 'time';
 
     return (
         <View style={styles.card}>

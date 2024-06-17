@@ -3,6 +3,9 @@ import * as FS from 'expo-file-system';
 import { Button, TextInput, View, Text} from 'react-native'
 import { Skill } from "../../../types/Skill";
 import { Picker } from '@react-native-picker/picker';
+import GoalInput from './goal-input/GoalInput.Component';
+
+import { LevelUpMetric } from '../../../types/Skill';
 
 const AddSkill = () => {
 
@@ -13,14 +16,14 @@ const AddSkill = () => {
         skillLevel: 0,
         secondsToLevelUp: 0,
         secondsToNextLevel: 0,
-        levelUpMethod: 'time',
+        levelUpMetric: 'time',
         importance: 1,
         category: ""
     }
 
     const skillDataTemplateB: Skill = {
         skillName: "",
-        levelUpMethod: 'goal',
+        levelUpMetric: 'goal',
         goals: [],
         importance: 1,
         skillLevel: 0,
@@ -43,9 +46,14 @@ const AddSkill = () => {
         }
     }
 
+    const handleSetGoals = (goals: string[]) => {
+        if(skillData.levelUpMetric === "time") return
+        setSkillData({...skillData, goals: goals})
+    }
+
     const SkillPicker = () => {
-        const returnSkillTemplate = () => {
-            if(skillData.levelUpMethod === 'time'){
+        const returnSkillTemplate = (value: LevelUpMetric) => {
+            if(value === 'time'){
                 return skillDataTemplateA;
             }else{
                 return skillDataTemplateB;
@@ -54,22 +62,11 @@ const AddSkill = () => {
 
         return (
             <Picker
-                selectedValue={skillData}
-                onValueChange={() => setSkillData(returnSkillTemplate())}
+                onValueChange={(itemValue: LevelUpMetric) => setSkillData(returnSkillTemplate(itemValue))}
             >
                 <Picker.Item label={"Time"} value={"time"}/>
                 <Picker.Item label={"Goal"} value={"goal"}/>
             </Picker>
-        )
-    }
-
-    const GoalInput = () => {
-        return(
-            <View>
-                <Text>Enter 1 - 3 goals that need to be reached to level up</Text>
-                <TextInput placeholder={"Enter Goal"} onChangeText={(text) => setSkillData({...skillData, goals: [...skillData.goals, text]})}/>
-                <Button title={"Add Goal"} onPress={() => setSkillData({...skillData, goals: [...skillData.goals, ""]})}/>
-            </View>
         )
     }
 
@@ -80,9 +77,9 @@ const AddSkill = () => {
             <Text>Do you want to progress by spending time to practice, or by reaching specific goals?</Text>
             <SkillPicker/>
             {
-                skillData.levelUpMethod === 'time' 
+                skillData.levelUpMetric === 'time' 
                 ? <TextInput placeholder={"Enter Time Spent to level up"} onChangeText={(text) => setSkillData({...skillData, secondsToLevelUp: parseInt(text)})}/>
-                : <GoalInput/>
+                : <GoalInput confirmGoals={handleSetGoals}/>
             }
             <Text>Select Skill Importance</Text>
             <View>
