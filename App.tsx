@@ -8,6 +8,7 @@ import SkillLevelTimer from './components/timer/Timer.Component';
 import SkillPage from './components/pages/skill-page/SkillPage.Component';
 import { RouteParamsList } from './types/RouteParamsList';
 import SkillCheckList from './components/pages/skill-checklist/SkillCheckList.Component';
+import { RootSiblingParent } from 'react-native-root-siblings';
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator<RouteParamsList>();
@@ -24,14 +25,16 @@ const DrawerRoutes = () => {
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Drawer Routes">
-        <Stack.Screen name="Drawer Routes" component={DrawerRoutes} options={{headerShown: false}} />
-        <Stack.Screen name="Skill Timer" component={SkillLevelTimer} />
-        <Stack.Screen name="Skill Page" component={SkillPage} />
-        <Stack.Screen name="Skill Checklist" component={SkillCheckList} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <RootSiblingParent>
+        <NavigationContainer>
+            <Stack.Navigator initialRouteName="Drawer Routes">
+            <Stack.Screen name="Drawer Routes" component={DrawerRoutes} options={{headerShown: false}} />
+            <Stack.Screen name="Skill Timer" component={SkillLevelTimer} />
+            <Stack.Screen name="Skill Page" component={SkillPage} />
+            <Stack.Screen name="Skill Checklist" component={SkillCheckList} />
+            </Stack.Navigator>
+        </NavigationContainer>
+    </RootSiblingParent>
   );
 }
 

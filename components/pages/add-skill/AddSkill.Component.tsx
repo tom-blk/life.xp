@@ -9,6 +9,7 @@ import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { checkIfUserInputIsNumber } from '../../../utils/sanitizing';
 import { addSkill } from '../../../utils/add-skill'; 
+import { showToast } from '../../../utils/show-toast';
 
 
 const AddSkill = () => {
@@ -69,21 +70,24 @@ const AddSkill = () => {
     }
 
     const handleSubmit = () => {
-        if(!importanceWasSelected)return
-        //Add error handling
-            if(skillData.levelUpMetric === "time"){
-                if(checkIfUserInputIsNumber(skillData.secondsToLevelUp)){
-                    addSkill(
-                        {...skillData, secondsToLevelUp: parseInt(skillData.secondsToLevelUp)},
-                        filePath
-                    );
-                } else {
-                    return
-                    //Add Error handling here
-                }
+        if(!importanceWasSelected){
+            showToast("Please select importance!")
+            return
+        }
+        
+        if(skillData.levelUpMetric === "time"){
+            if(checkIfUserInputIsNumber(skillData.secondsToLevelUp)){
+                addSkill(
+                    {...skillData, secondsToLevelUp: parseInt(skillData.secondsToLevelUp)},
+                    filePath
+                );
             } else {
-                addSkill(skillData, filePath);
+                showToast("Please insert a (whole) number!")
+                return
             }
+        } else {
+            addSkill(skillData, filePath);
+        }
     }
 
     return (
