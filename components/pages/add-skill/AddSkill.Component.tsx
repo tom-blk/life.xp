@@ -1,28 +1,21 @@
 import React, { useState } from 'react'
 import * as FS from 'expo-file-system';
 import { Button, TextInput, View, Text} from 'react-native'
-import { Skill, SkillImportance } from "../../../types/Skill";
+import { Skill, SkillImportance, UserInputSkill, UserInputSkillA } from "../../../types/Skill";
 import { LevelUpMetric } from '../../../types/Skill';
 import GoalInput from './goal-input/GoalInput.Component';
 import LevelUpMetricPicker from './level-up-metric-picker/LevelUpMetricPicker.Component';
 import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { checkIfUserInputIsNumber } from '../../../utils/sanitizing';
+import { addSkill } from '../../../utils/add-skill'; 
 
-interface SkillTemplateA {
-    skillName: string;
-    skillLevel: number;
-    secondsToLevelUp: string;
-    secondsToNextLevel: number;
-    levelUpMetric: LevelUpMetric;
-    importance: SkillImportance;
-    category: string;
-}
 
 const AddSkill = () => {
 
     const filePath = FS.documentDirectory + '/skill-list.json';
 
-    const skillDataTemplateTime: SkillTemplateA = {
+    const skillDataTemplateTime: UserInputSkill = {
         skillName: "",
         skillLevel: 0,
         secondsToLevelUp: "",
@@ -32,7 +25,7 @@ const AddSkill = () => {
         category: ""
     }
 
-    const skillDataTemplateGoal: SkillB = {
+    const skillDataTemplateGoal: UserInputSkill = {
         skillName: "",
         skillLevel: 0,
         goals: [],
@@ -43,33 +36,8 @@ const AddSkill = () => {
     
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
-    const [skillData, setSkillData] = useState<Skill>(skillDataTemplateTime);
+    const [skillData, setSkillData] = useState<UserInputSkill>(skillDataTemplateTime);
     const [importanceWasSelected, setImportanceWasSelected] = useState<boolean>(false);
-
-    const addSkill = async () => {
-        if(!skillData.skillName || skillData.skillName === "" || skillData.skillName === " ") return
-
-        if(!importanceWasSelected) return
-
-        const fileInfo = await FS.getInfoAsync(filePath)
-    
-        if(fileInfo.exists){
-            
-            const rawData = await FS.readAsStringAsync(filePath, { encoding: FS.EncodingType.UTF8 })
-            
-            let skillList = JSON.parse(rawData);
-            
-            skillList.push(skillData);
-            
-            await FS.writeAsStringAsync(filePath, JSON.stringify(skillList), { encoding: FS.EncodingType.UTF8 })
-                .then(() => console.log("File Written"))
-        } else {
-            await FS.writeAsStringAsync(filePath, JSON.stringify([skillData]), { encoding: FS.EncodingType.UTF8 })
-                .then(() => console.log("File Written"))
-        }
-        setSkillData(skillDataTemplateTime);
-        navigation.navigate("Skill Page") 
-    }
 
     const handleAddGoal = (goal: string) => {
         if(skillData.levelUpMetric === "time") return
@@ -82,7 +50,7 @@ const AddSkill = () => {
     const handleRemoveGoal = (goal: string) => {
         if(skillData.levelUpMetric === "time") return
         setSkillData({
-            ...skillData,
+            ...skillData, 
             goals: skillData.goals.filter((item: string) => item !== goal)
         })
     }
@@ -100,29 +68,24 @@ const AddSkill = () => {
         setSkillData({...skillData, importance: importance});
     }
 
-    const checkUserInputForNumber = (userInput: string) => {
-        if(userInput === "") return false;
-        
-        const regexIntCheck = /^-?\d+$/;
-        if (!regexIntCheck.test(userInput)) return false;
-
-        const parsedNumber = parseInt(userInput);
-        
-        return Number.isInteger(parsedNumber);
+    const handleSubmit = () => {
+        if(!importanceWasSelected)return
+        //Add error handling
+            if(skillData.levelUpMetric === "time"){
+                if(checkIfUserInputIsNumber(skillData.secondsToLevelUp)){
+                    addSkill(
+                        {...skillData, secondsToLevelUp: parseInt(skillData.secondsToLevelUp)},
+                        filePath
+                    );
+                } else {
+                    return
+                    //Add Error handling here
+                }
+            } else {
+                addSkill(skillData, filePath);
+            }
     }
 
-    const handleSetSecondsToLevelUp = (userInput: string) => {
-        if(skillData.levelUpMetric === "goal") return
-
-        const trimmedUserInput = userInput.trim();
-
-        if(checkUserInputForNumber(trimmedUserInput)){
-            setSkillData({...skillData, secondsToLevelUp: parseInt(trimmedUserInput)})
-        }else{
-            setSkillData({...skillData, secondsToLevelUp: 0})
-        }
-    }
-    
     return (
         <View>
             <Text>Add Skill</Text>
@@ -130,7 +93,7 @@ const AddSkill = () => {
             <TextInput 
                 value={skillData.skillName} 
                 placeholder={"Enter Skill Name"} 
-                onChangeText={(userInput) => setSkillData({...skillData, skillName: userInput.trim()})}
+                onChangeText={(userInput) => setSkillData({...skillData, skillName: userInput})}
             />
             
             <Text>Do you want to progress by spending time to practice, or by reaching specific goals?</Text>
@@ -144,7 +107,7 @@ const AddSkill = () => {
                     value={skillData.secondsToLevelUp} 
                     keyboardType="numeric"
                     placeholder={"Enter Time Spent to level up"} 
-                    onChangeText={(userInput) => handleSetSecondsToLevelUp(userInput)}
+                    onChangeText={(userInput) => setSkillData({...skillData, secondsToLevelUp:userInput})}
                 />
                 : 
                 <GoalInput 
@@ -152,7 +115,6 @@ const AddSkill = () => {
                     addGoal={handleAddGoal} 
                     removeGoal={handleRemoveGoal}
                 />
-            
             }
             
             <Text>Select Skill Importance</Text>
@@ -160,11 +122,10 @@ const AddSkill = () => {
             <View>
                 <Button title={"1"} onPress={() => handleImportanceSelection(1)} />
                 <Button title={"2"} onPress={() => handleImportanceSelection(2)} />
-                <Button title={"3"} onPress={() => handleImportanceSelection(3)} />
-            
+                <Button title={"3"} onPress={() => handleImportanceSelection(3)} /> 
             </View>
             
-            <Button title='Add' onPress={() => addSkill()}/>            
+            <Button title='Add' onPress={() => handleSubmit()}/>            
         </View> 
     )
 }

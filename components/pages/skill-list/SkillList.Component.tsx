@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import * as FS from 'expo-file-system';
-import { StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import SkillCard from '../../skill-card/SkillCard.Component';
 import { Skill } from '../../../types/Skill';
 import { SkillImportanceMap } from '../../../types/ObjectShapes';
@@ -68,14 +68,14 @@ const SkillList = () => {
     }
 
     return (
-        <View style={styles.list}>
+        <ScrollView style={styles.list}>
             <Text>High Importance</Text>
             {returnSkills(skills.highImportance)}
             <Text>Medium Importance</Text>
             {returnSkills(skills.mediumImportance)}
             <Text>Low Importance</Text>
             {returnSkills(skills.lowImportance)}
-        </View>
+        </ScrollView>
     )
 }
 
@@ -83,9 +83,9 @@ const styles = StyleSheet.create({
     list: {
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-around',
         gap: 10,
-        margin: 20
+        paddingHorizontal: 20,
+        marginVertical: 20
     }
 })
 
