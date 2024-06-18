@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import * as FS from 'expo-file-system';
-import { Button, TextInput, View, Text} from 'react-native'
-import { Skill, SkillImportance, UserInputSkill, UserInputSkillA } from "../../../types/Skill";
+import { Button, TextInput, View, Text, Keyboard} from 'react-native';
+import { SkillImportance, UserInputSkill } from "../../../types/Skill";
 import { LevelUpMetric } from '../../../types/Skill';
 import GoalInput from './goal-input/GoalInput.Component';
 import LevelUpMetricPicker from './level-up-metric-picker/LevelUpMetricPicker.Component';
@@ -70,6 +70,8 @@ const AddSkill = () => {
     }
 
     const handleSubmit = () => {
+        Keyboard.dismiss();
+
         if(!importanceWasSelected){
             showToast("Please select importance!")
             return
@@ -88,6 +90,8 @@ const AddSkill = () => {
         } else {
             addSkill(skillData, filePath);
         }
+
+        //TODO make function async and navigate back to list on success
     }
 
     return (
